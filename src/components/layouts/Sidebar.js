@@ -17,10 +17,10 @@ import ListItemText from '@mui/material/ListItemText';
 import './style.css';
 import Logo from '../../assets/images (1).png'; 
 
-// import Appointment from '../../pages/appointment/Appointment';
-// import Dashboard from '../../pages/dashboard/Dashboard';
-// import Account from '../../pages/account/User';
-// import Report from '../../pages/reports/Report';
+import Appointment from '../../pages/appointment/Appointment';
+import Dashboard from '../../pages/dashboard/Dashboard';
+import Patient from '../../pages/patients/Patients';
+import Report from '../../pages/reports/Report';
 
 import DashboardIcon from '@mui/icons-material/Dashboard';
 import EventIcon from '@mui/icons-material/Event';
@@ -109,10 +109,10 @@ export default function Sidebar() {
       >
         <Toolbar />
         {/* Render content based on the selectedPage */}
-        {/* {selectedPage === '/dashboard' && <Dashboard/>}
+        {selectedPage === '/dashboard' && <Dashboard/>}
         {selectedPage === '/appointment' && <Appointment />}
         {selectedPage === '/report' && <Report/>}
-        {selectedPage === '/account' && <Account />} */}
+        {selectedPage === '/account' && <Patient />}
 
         {/* Add more conditions for additional pages */}
       </Box>
