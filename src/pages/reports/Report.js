@@ -1,155 +1,134 @@
 import React, { useState } from 'react';
-import {
-  Table,
-  TableBody,
-  TableCell,
-  TableContainer,
-  TableHead,
-  TableRow,
-  Paper,
-  Button,
-  Dialog,
-  DialogTitle,
-  DialogContent,
-  DialogActions,
-  TextField,
-  Radio,
-  RadioGroup,
-  FormControlLabel,
-  FormControl,
-  FormLabel,
-} from '@mui/material';
+import Grid from '@mui/material/Grid';
 import './style.css'; // Import the CSS file
-import CreditCardIcon from '@mui/icons-material/CreditCard';
-import PersonIcon from '@mui/icons-material/Person';
 
 const ReportPage = () => {
-  const [reportData, setReportData] = useState([
-    { queueId: '12345', testedDate: '2022-03-01', paymentStatus: true, totalCost: 50 },
-    { queueId: '67890', testedDate: '2022-03-05', paymentStatus: false, totalCost: 30 },
-    // Add more data as needed
-  ]);
-// $("input[name='expiry-data']").mask("00 / 00");
-  const [selectedRow, setSelectedRow] = useState(null);
-  const [openPaymentPopup, setOpenPaymentPopup] = useState(false);
-  const [paymentMethod, setPaymentMethod] = useState('creditCard');
+  const [reportData, setReportData] = useState({
+    patientId: '',
+    patientName: '',
+    testedDate: '',
+    appointmentNumber: '',
+    reportFile: null,
+  });
 
-  const handleDownloadReport = (queueId, paymentStatus) => {
-    if (paymentStatus) {
-      // Implement your logic to download the report
-      console.log(`Downloading report for queue ID ${queueId}`);
+  const [errors, setErrors] = useState({});
+
+  const handleSave = () => {
+    // Validate required fields
+    const validationErrors = {};
+    const requiredFields = ['patientId', 'patientName', 'testedDate', 'appointmentNumber', 'reportFile'];
+
+    requiredFields.forEach((field) => {
+      if (!reportData[field]) {
+        validationErrors[field] = `${field.charAt(0).toUpperCase() + field.slice(1)} is required.`;
+      }
+    });
+
+    if (Object.keys(validationErrors).length > 0) {
+      setErrors(validationErrors);
+      return;
+    }
+
+    // Here you can save the report data
+    console.log('Report data saved:', reportData);
+
+    // Reset form after saving
+    setReportData({
+      patientId: '',
+      patientName: '',
+      testedDate: '',
+      appointmentNumber: '',
+      reportFile: null,
+    });
+
+    setErrors({});
+  };
+
+  const handleFileChange = (event) => {
+    const file = event.target.files[0];
+
+    // Check if the file is a PDF
+    if (file && file.type === 'application/pdf') {
+      setReportData({ ...reportData, reportFile: file });
+      setErrors({ ...errors, reportFile: null });
     } else {
-      console.log(`Payment not made for queue ID ${queueId}. Cannot download report.`);
+      setErrors({ ...errors, reportFile: 'Please upload a valid PDF file.' });
     }
   };
 
-  const handlePayNow = (row) => {
-    setSelectedRow(row);
-    setOpenPaymentPopup(true);
-  };
-
-  const handleClosePaymentPopup = () => {
-    setOpenPaymentPopup(false);
-    setSelectedRow(null);
-    setPaymentMethod('creditCard');
-  };
-
-  const handleContinuePayment = () => {
-    // Implement logic to handle payment continuation based on paymentMethod
-    // For simplicity, just closing the payment popup in this example
-    handleClosePaymentPopup();
-  };
-
-  const handlePaymentMethodChange = (event) => {
-    setPaymentMethod(event.target.value);
-  };
-
-  const handlePaymentDone = () => {
-    // Implement logic to mark the payment as done in your data
-    setReportData((prevReportData) =>
-      prevReportData.map((row) =>
-        row.queueId === selectedRow.queueId ? { ...row, paymentStatus: true } : row
-      )
-    );
-
-    handleClosePaymentPopup();
-  };
-
   return (
-    <div className="report-page">
+    <div className="">
       <h1>Report Page</h1>
 
-      <TableContainer component={Paper}>
-        <Table>
-          <TableHead>
-            <TableRow>
-              <TableCell>Patient Queue ID</TableCell>
-              <TableCell>Tested Date</TableCell>
-              <TableCell>Report</TableCell>
-            </TableRow>
-          </TableHead>
-          <TableBody>
-            {reportData.map((data) => (
-              <TableRow key={data.queueId}>
-                <TableCell>{data.queueId}</TableCell>
-                <TableCell>{data.testedDate}</TableCell>
-                <TableCell>
-                  {!data.paymentStatus ? (
-                    <Button onClick={() => handleDownloadReport(data.queueId, data.paymentStatus)}>
-                      Download Report
-                    </Button>
-                  ) : (
-                    <>
-                      <Button onClick={() => handlePayNow(data)}>Pay Now</Button>
-                      {/* Payment Popup */}
-                      <Dialog open={openPaymentPopup} onClose={handleClosePaymentPopup} className="paymentPopup">
-                       
-                       <div class="wrapper">
-                          <div class="payment">
-                            <h2>Payment Gateway</h2>
-                            <div class="form">
-                              <div class="card space icon-relative">
-                                <label class="label">Card holder:</label>
-                                <input type="text" class="input" placeholder="Coding Market"/>
-                                <i class="fas fa-user"></i>
-                                {/* <CreditCardIcon className=''/>
-                                <PersonIcon/> */}
-                              </div>
-                              <div class="card space icon-relative">
-                                <label class="label">Card number:</label>
-                                <input type="text" class="input" data-mask="0000 0000 0000 0000" placeholder="Card Number"/>
-                                <i class="far fa-credit-card"></i>
-                              </div>
-                              <div class="card-grp space">
-                                <div class="card-item icon-relative">
-                                  <label class="label">Expiry date:</label>
-                                  <input type="text" name="expiry-data" class="input"  placeholder="00 / 00"/>
-                                  <i class="far fa-calendar-alt"></i>
-                                  {/* <CreditCardIcon/> */}
-                                </div>
-                                <div class="card-item icon-relative">
-                                  <label class="label">CVC:</label>
-                                  <input type="text" class="input" data-mask="000" placeholder="000"/>
-                                  <i class="fas fa-lock"></i>
-                                </div>
-                              </div>
-                                
-                              <div class="btn">
-                                Pay
-                              </div> 
-                              
-                            </div>
-                          </div>
-                        </div>
-                      </Dialog>
-                    </>
-                  )}
-                </TableCell>
-              </TableRow>
-            ))}
-          </TableBody>
-        </Table>
-      </TableContainer>
+      <div className="user-form">
+        <Grid container spacing={2}>
+          <Grid item xs={12} sm={4}>
+            <label>
+              Patient ID:
+              <input
+                type="text"
+                value={reportData.patientId}
+                onChange={(e) => setReportData({ ...reportData, patientId: e.target.value })}
+              />
+              {errors.patientId && <span className="error">{errors.patientId}</span>}
+            </label>
+          </Grid>
+
+          <Grid item xs={12} sm={4}>
+            <label>
+              Patient Name:
+              <input
+                type="text"
+                value={reportData.patientName}
+                onChange={(e) => setReportData({ ...reportData, patientName: e.target.value })}
+              />
+              {errors.patientName && <span className="error">{errors.patientName}</span>}
+            </label>
+          </Grid>
+
+          <Grid item xs={12} sm={4}>
+            <label>
+              Tested Date:
+              <input
+                type="date"
+                value={reportData.testedDate}
+                onChange={(e) => setReportData({ ...reportData, testedDate: e.target.value })}
+              />
+              {errors.testedDate && <span className="error">{errors.testedDate}</span>}
+            </label>
+          </Grid>
+
+          <Grid item xs={12} sm={4}>
+            <label>
+              Appointment Number:
+              <input
+                type="text"
+                value={reportData.appointmentNumber}
+                onChange={(e) => setReportData({ ...reportData, appointmentNumber: e.target.value })}
+              />
+              {errors.appointmentNumber && (
+                <span className="error">{errors.appointmentNumber}</span>
+              )}
+            </label>
+          </Grid>
+
+          <Grid item xs={12} sm={4}>
+            <label>
+              Upload Report (PDF only):
+              <input
+                type="file"
+                accept="application/pdf"
+                onChange={handleFileChange}
+              />
+              {errors.reportFile && <span className="error">{errors.reportFile}</span>}
+            </label>
+          </Grid>
+
+          <Grid item xs={12}>
+            <button onClick={handleSave}>Save</button>
+          </Grid>
+        </Grid>
+      </div>
     </div>
   );
 };

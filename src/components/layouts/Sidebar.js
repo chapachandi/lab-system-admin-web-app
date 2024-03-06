@@ -21,19 +21,22 @@ import Appointment from '../../pages/appointment/Appointment';
 import Dashboard from '../../pages/dashboard/Dashboard';
 import Patient from '../../pages/patients/Patients';
 import Report from '../../pages/reports/Report';
+import Test from '../../pages/test/Test';
 
 import DashboardIcon from '@mui/icons-material/Dashboard';
 import EventIcon from '@mui/icons-material/Event';
-import FileDownloadIcon from '@mui/icons-material/FileDownload';
-import PersonIcon from '@mui/icons-material/Person';
+import FileUploadIcon from '@mui/icons-material/FileUpload';
+import PeopleAltIcon from '@mui/icons-material/PeopleAlt';
+import BiotechIcon from '@mui/icons-material/Biotech';
 
 const drawerWidth = 240;
 
 const pages = [
   { label: 'Dashboard', icon: <DashboardIcon style={{ color: '#999999'}}/>, path: '/dashboard' },
   { label: 'Appointment', icon: <EventIcon style={{ color: '#999999'}}/>, path: '/appointment' },
-  { label: 'Reports', icon: <FileDownloadIcon style={{ color: '#999999'}}/>, path: '/report' },
-  { label: 'Account', icon: <PersonIcon style={{ color: '#999999'}}/>, path: '/account' },
+  { label: 'Reports', icon: <FileUploadIcon style={{ color: '#999999'}}/>, path: '/report' },
+  { label: 'Test', icon: <BiotechIcon style={{ color: '#999999'}}/>, path: '/test' },
+  { label: 'Patients', icon: <PeopleAltIcon style={{ color: '#999999'}}/>, path: '/patient' },
   // Add more pages as needed
 ];
 
@@ -112,7 +115,8 @@ export default function Sidebar() {
         {selectedPage === '/dashboard' && <Dashboard/>}
         {selectedPage === '/appointment' && <Appointment />}
         {selectedPage === '/report' && <Report/>}
-        {selectedPage === '/account' && <Patient />}
+        {selectedPage === '/test' && <Test/>}
+        {selectedPage === '/patient' && <Patient />}
 
         {/* Add more conditions for additional pages */}
       </Box>
