@@ -30,6 +30,7 @@ const AppointmentPage = () => {
     { id: 'patientId', numeric: false, disablePadding: true, label: 'Patient ID' },
     { id: 'date', numeric: false, disablePadding: false, label: 'Date' },
     { id: 'time', numeric: false, disablePadding: false, label: 'Time' },
+    { id: 'test', numeric: false, disablePadding: false, label: 'Test' },
     { id: 'appointmentNumber', numeric: false, disablePadding: false, label: 'Appointment Number' },
     { id: 'actions', numeric: false, disablePadding: false, label: 'Actions' },
   ];

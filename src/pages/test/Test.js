@@ -58,11 +58,11 @@ const TestPage = () => {
     price: detail.price,
     action: (
         <IconButton
-            color="secondary"
+            color="primary"
             onClick={() => removeTestDetail(index)}
             style={{ width: "30px", backgroundColor: "white" }}
         >
-            <DeleteIcon   color="secondary"/>
+            <DeleteIcon   color="primary"/>
         </IconButton>
     ),
   }));
@@ -98,7 +98,7 @@ const TestPage = () => {
           <Grid item xs={12} sm={4}></Grid>
         </Grid>
         <Grid item xs={12}>
-          <button onClick={handleSave}>ADD</button>
+          <Button  variant="contained" color="primary" onClick={handleSave}>ADD</Button>
         </Grid>
         
          {/* Display the added test details */}
